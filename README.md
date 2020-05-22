@@ -1,12 +1,9 @@
 provider "aws" {
   region                  = "us-east-1"
-  shared_credentials_file = "/Users/ivanbotero/.aws/credentials"
-  profile                 = "sundevs-terraform"
 }
 
-module "VPCModule" {
-  source = "./modules/VPC/"
-  NAME   = "VPCSunDevs"
+module "VPC" {
+  NAME   = "MyVPC"
   CIDR   = "10.20.0.0/16"
   PUBLIC-SUBNET = [
     "10.20.0.0/24",
