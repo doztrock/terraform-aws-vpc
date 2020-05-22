@@ -100,4 +100,4 @@ module "VPC" {
 }
 ```
 
-> NOTA: La variable **NAME** se adjuntara a todos los recursos creados bajo la VPC para permitir una mejor identificacion de los mismo al momento de ingresar a Amazon Web Services.
+NOTA: La variable **NAME** se adjuntara a todos los recursos creados bajo la VPC para permitir una mejor identificacion de los mismo al momento de ingresar a Amazon Web Services.
