@@ -8,6 +8,7 @@ variable "CIDR" {
 
 variable "PUBLIC-SUBNET" {
   description = "VPC Public Subnet"
+  default     = []
 }
 
 variable "PRIVATE-SUBNET" {
