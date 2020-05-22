@@ -5,12 +5,10 @@ output "VPC-ID" {
 
 output "PUBLIC-SUBNET" {
   description = "VPC Public Subnet List"
-  count       = length(aws_subnet.subnet-public)
-  value       = aws_subnet.subnet-public[count.index].id
+  value       = aws_subnet.subnet-public
 }
 
 output "PRIVATE-SUBNET" {
   description = "VPC Private Subnet List"
-  count       = length(aws_subnet.subnet-public)
-  value = aws_subnet.subnet-public[count.index].id
+  value = aws_subnet.subnet-public
 }
