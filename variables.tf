@@ -40,13 +40,3 @@ variable "NAT2" {
   description = "VPC NAT Gateway #3"
   default     = []
 }
-
-variable "NAT3" {
-  description = "VPC NAT Gateway #4"
-  default     = []
-}
-
-variable "NAT4" {
-  description = "VPC NAT Gateway #5"
-  default     = []
-}
