@@ -104,22 +104,20 @@ resource "aws_route_table" "route-table-private" {
   }
 }
 
-/*
 resource "aws_route_table_association" "route-table-private-subnet-nat0" {
   count          = length(var.NAT0)
-  subnet_id      = aws_subnet.private-subnet[count.index].id
-  route_table_id = aws_route_table.route-table-private[count.index].id
+  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT0[count.index])
+  route_table_id = aws_route_table.route-table-private[0].id
 }
 
 resource "aws_route_table_association" "route-table-private-subnet-nat1" {
   count          = length(var.NAT1)
-  subnet_id      = aws_subnet.private-subnet[count.index].id
-  route_table_id = aws_route_table.route-table-private[count.index].id
+  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT1[count.index])
+  route_table_id = aws_route_table.route-table-private[1].id
 }
 
 resource "aws_route_table_association" "route-table-private-subnet-nat2" {
   count          = length(var.NAT2)
-  subnet_id      = aws_subnet.private-subnet[count.index].id
-  route_table_id = aws_route_table.route-table-private[count.index].id
+  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT2[count.index])
+  route_table_id = aws_route_table.route-table-private[2].id
 }
-*/
