@@ -15,10 +15,10 @@ output "PRIVATE-SUBNET" {
 
 output "ELASTIC-IP" {
   description = "Listado de direcciones IP."
-  value       = aws_subnet.internet-gateway
+  value       = aws_eip.elastic-ip
 }
 
 output "NAT-GATEWAY" {
   description = "Listado de NAT."
-  value       = aws_subnet.nat-gateway
+  value       = aws_nat_gateway.nat-gateway
 }
