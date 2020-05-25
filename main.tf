@@ -45,7 +45,7 @@ resource "aws_default_route_table" "route-table-public" {
   }
 }
 
-resource "aws_subnet" "subnet-public" {
+resource "aws_subnet" "public-subnet" {
   count      = length(var.PUBLIC-SUBNET)
   vpc_id     = aws_vpc.vpc.id
   cidr_block = var.PUBLIC-SUBNET[count.index]
@@ -54,41 +54,46 @@ resource "aws_subnet" "subnet-public" {
   }
 }
 
-resource "aws_route_table_association" "route-table-subnet-public" {
+resource "aws_route_table_association" "route-table-public-subnet" {
   count          = length(var.PUBLIC-SUBNET)
-  subnet_id      = aws_subnet.subnet-public[count.index].id
+  subnet_id      = aws_subnet.public-subnet[count.index].id
   route_table_id = aws_default_route_table.route-table-public.id
 }
 
-/*
- * ELASTIC IP
- */
+
+#####################
+# PRIVATE RESOURCES #
+#####################
+
+resource "aws_subnet" "private-subnet" {
+  count      = length(var.PRIVATE-SUBNET)
+  vpc_id     = aws_vpc.vpc.id
+  cidr_block = var.PRIVATE-SUBNET[count.index]
+  tags = {
+    Name = join(" - ", [join(" ", ["PrivateSubnet", count.index]), var.NAME])
+  }
+}
+
 resource "aws_eip" "elastic-ip" {
-  count      = length(var.NAT)
+  count      = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
   vpc        = true
   depends_on = [aws_internet_gateway.internet-gateway]
   tags = {
-    Name = join(" - ", [join(" ", ["IP", count.index]), var.NAME])
+    Name = join(" - ", [join(" ", ["ElasticIP", count.index]), var.NAME])
   }
 }
 
-/*
- * NAT Gateway
- */
 resource "aws_nat_gateway" "nat-gateway" {
-  count         = length(var.NAT)
+  count         = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
   allocation_id = aws_eip.elastic-ip[count.index].id
-  subnet_id     = aws_subnet.subnet-public[count.index].id
+  subnet_id     = aws_subnet.public-subnet[count.index].id
   tags = {
-    Name = join(" - ", [join(" ", ["NAT", count.index]), var.NAME])
+    Name = join(" - ", [join(" ", ["NATGateway", count.index]), var.NAME])
   }
 }
 
-/*
- * ROUTE TABLE (PRIVATE)
- */
 resource "aws_route_table" "route-table-private" {
-  count  = length(var.NAT)
+  count  = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -100,22 +105,21 @@ resource "aws_route_table" "route-table-private" {
 }
 
 /*
- * SUBNET (PRIVATE)
- */
-resource "aws_subnet" "subnet-private" {
-  for_each   = var.NAT
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = each.value
-  tags = {
-    Name = join(" - ", [join(" ", ["PrivateSubnet", each.key]), var.NAME])
-  }
-}
-
-/*
- * SUBNET ASSOCIATION (PRIVATE)
- */
-resource "aws_route_table_association" "route-table-subnet-private" {
-  count          = length(var.NAT)
-  subnet_id      = aws_subnet.subnet-private[count.index].id
+resource "aws_route_table_association" "route-table-private-subnet-nat0" {
+  count          = length(var.NAT0)
+  subnet_id      = aws_subnet.private-subnet[count.index].id
   route_table_id = aws_route_table.route-table-private[count.index].id
 }
+
+resource "aws_route_table_association" "route-table-private-subnet-nat1" {
+  count          = length(var.NAT1)
+  subnet_id      = aws_subnet.private-subnet[count.index].id
+  route_table_id = aws_route_table.route-table-private[count.index].id
+}
+
+resource "aws_route_table_association" "route-table-private-subnet-nat2" {
+  count          = length(var.NAT2)
+  subnet_id      = aws_subnet.private-subnet[count.index].id
+  route_table_id = aws_route_table.route-table-private[count.index].id
+}
+*/
