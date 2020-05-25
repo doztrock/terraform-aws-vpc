@@ -1,6 +1,7 @@
-/*
- * VPC
- */
+#######
+# VPC #
+#######
+
 resource "aws_vpc" "vpc" {
   cidr_block       = var.CIDR
   instance_tenancy = "default"
@@ -9,27 +10,23 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-/*
- * DHCP
- */
 resource "aws_vpc_dhcp_options" "dhcp" {
-  domain_name_servers = ["8.8.8.8", "8.8.4.4"]
+  domain_name_servers = var.DNS
   tags = {
     Name = join(" - ", ["DHCP", var.NAME])
   }
 }
 
-/*
- * VPC-DHCP ASSOCIATION
- */
 resource "aws_vpc_dhcp_options_association" "vpc-dhcp" {
   vpc_id          = aws_vpc.vpc.id
   dhcp_options_id = aws_vpc_dhcp_options.dhcp.id
 }
 
-/*
- * INTERNET GATEWAY (PUBLIC)
- */
+
+####################
+# PUBLIC RESOURCES #
+####################
+
 resource "aws_internet_gateway" "internet-gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
@@ -37,9 +34,6 @@ resource "aws_internet_gateway" "internet-gateway" {
   }
 }
 
-/*
- * ROUTE TABLE (PUBLIC)
- */
 resource "aws_default_route_table" "route-table-public" {
   default_route_table_id = aws_vpc.vpc.default_route_table_id
   route {
@@ -51,9 +45,6 @@ resource "aws_default_route_table" "route-table-public" {
   }
 }
 
-/*
- * SUBNET (PUBLIC)
- */
 resource "aws_subnet" "subnet-public" {
   count      = length(var.PUBLIC-SUBNET)
   vpc_id     = aws_vpc.vpc.id
@@ -63,9 +54,6 @@ resource "aws_subnet" "subnet-public" {
   }
 }
 
-/*
- * SUBNET ASSOCIATION (PUBLIC)
- */
 resource "aws_route_table_association" "route-table-subnet-public" {
   count          = length(var.PUBLIC-SUBNET)
   subnet_id      = aws_subnet.subnet-public[count.index].id
