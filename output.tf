@@ -1,24 +1,24 @@
-output "VPC-ID" {
+output "vpc_id" {
   description = "Identificador asignado a la VPC."
   value       = aws_vpc.vpc.id
 }
 
-output "PUBLIC-SUBNET" {
+output "public_subnet" {
   description = "Listado de subredes publicas."
-  value       = aws_subnet.public-subnet
+  value       = aws_subnet.public_subnet
 }
 
-output "PRIVATE-SUBNET" {
+output "private_subnet" {
   description = "Listado de subredes privadas."
-  value       = aws_subnet.private-subnet
+  value       = aws_subnet.private_subnet
 }
 
-output "ELASTIC-IP" {
+output "elastic_ip" {
   description = "Listado de direcciones IP."
-  value       = aws_eip.elastic-ip
+  value       = aws_eip.elastic_ip
 }
 
-output "NAT-GATEWAY" {
+output "nat_gateway" {
   description = "Listado de NAT."
-  value       = aws_nat_gateway.nat-gateway
+  value       = aws_nat_gateway.nat_gateway
 }
