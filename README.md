@@ -120,6 +120,6 @@ module "vpc" {
 
 *La variable **NAME** se adjuntara a todos los recursos creados bajo la VPC para permitir una mejor identificacion de los mismo al momento de ingresar a *Amazon Web Services*.
 
-**La cantidad de redes publicas no debe ser **inferior** a la cantidad de __NAT__ a crear, esto para permitir una mejor distribucion de todos los recursos en diferentes zonas de disponibilidad.
+**La cantidad de redes publicas no debe ser __inferior__ a la cantidad de __NAT__ a crear, esto para permitir una mejor distribucion de todos los recursos en diferentes zonas de disponibilidad.
 
-***Cabe aclarar que siempre es **necesario** contar con **subredes privadas** para poder crear **NAT**.
+***Cabe aclarar que siempre es **necesario** contar con __subredes privadas__ para poder crear __NAT__.
