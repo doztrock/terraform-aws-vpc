@@ -1,8 +1,8 @@
-variable "NAME" {
+variable "name" {
   description = "Nombre de la VPC."
 }
 
-variable "DNS" {
+variable "dns" {
   description = "DNS asignados a la VPC."
   default = [
     "208.67.222.222",
@@ -12,21 +12,21 @@ variable "DNS" {
   ]
 }
 
-variable "CIDR" {
+variable "cidr" {
   description = "Bloque CIDR asignado a la VPC"
 }
 
-variable "PUBLIC-SUBNET" {
+variable "public_subnet" {
   description = "Listado de subredes publicas."
   default     = []
 }
 
-variable "PRIVATE-SUBNET" {
+variable "private_subnet" {
   description = "Listado de subredes privadas."
   default     = []
 }
 
-variable "NAT" {
+variable "nat_association" {
   description = "Listado de subredes asociadas por NAT."
   default     = []
 }
