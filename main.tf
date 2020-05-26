@@ -75,7 +75,7 @@ resource "aws_subnet" "private-subnet" {
 }
 
 resource "aws_eip" "elastic-ip" {
-  count      = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
+  count      = length(var.NAT)
   vpc        = true
   depends_on = [aws_internet_gateway.internet-gateway]
   tags = {
@@ -84,7 +84,7 @@ resource "aws_eip" "elastic-ip" {
 }
 
 resource "aws_nat_gateway" "nat-gateway" {
-  count         = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
+  count         = length(var.NAT)
   allocation_id = aws_eip.elastic-ip[count.index].id
   subnet_id     = aws_subnet.public-subnet[count.index].id
   tags = {
@@ -93,7 +93,7 @@ resource "aws_nat_gateway" "nat-gateway" {
 }
 
 resource "aws_route_table" "route-table-private" {
-  count  = (length(var.NAT0) > 0 ? 1 : 0) + (length(var.NAT1) > 0 ? 1 : 0) + (length(var.NAT2) > 0 ? 1 : 0)
+  count  = length(var.NAT)
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -104,20 +104,21 @@ resource "aws_route_table" "route-table-private" {
   }
 }
 
-resource "aws_route_table_association" "route-table-private-subnet-nat0" {
-  count          = length(var.NAT0)
-  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT0[count.index])
-  route_table_id = aws_route_table.route-table-private[0].id
+locals {
+
+  NAT-ASSOCIATION = flatten([
+    for KEY, LIST in var.NAT : [
+      for CIDR in LIST : {
+        "subnet"      = aws_subnet.private-subnet[index(aws_subnet.private-subnet.*.cidr_block, CIDR)].id
+        "route-table" = aws_route_table.route-table-private[KEY].id
+      }
+    ]
+  ])
+
 }
 
-resource "aws_route_table_association" "route-table-private-subnet-nat1" {
-  count          = length(var.NAT1)
-  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT1[count.index])
-  route_table_id = aws_route_table.route-table-private[1].id
-}
-
-resource "aws_route_table_association" "route-table-private-subnet-nat2" {
-  count          = length(var.NAT2)
-  subnet_id      = element(aws_subnet.private-subnet.*.id, var.NAT2[count.index])
-  route_table_id = aws_route_table.route-table-private[2].id
+resource "aws_route_table_association" "route-table-private-subnet" {
+  count          = length(local.NAT-ASSOCIATION)
+  subnet_id      = local.NAT-ASSOCIATION[count.index].subnet
+  route_table_id = local.NAT-ASSOCIATION[count.index].route-table
 }

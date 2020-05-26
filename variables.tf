@@ -26,17 +26,7 @@ variable "PRIVATE-SUBNET" {
   default     = []
 }
 
-variable "NAT0" {
-  description = "VPC NAT Gateway #1"
-  default     = []
-}
-
-variable "NAT1" {
-  description = "VPC NAT Gateway #2"
-  default     = []
-}
-
-variable "NAT2" {
-  description = "VPC NAT Gateway #3"
+variable "NAT" {
+  description = "Listado de subredes asociadas por NAT."
   default     = []
 }
