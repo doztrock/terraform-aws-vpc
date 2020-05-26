@@ -23,23 +23,23 @@ provider "aws" {
 
 module "vpc" {
   source  = "app.terraform.io/sundevs/vpc/aws"
-  version = "1.0.2"
-  NAME    = "MyVPC"
-  CIDR    = "10.1.0.0/16"
-  PUBLIC-SUBNET = [
+  version = "1.0.3"
+  name    = "MyVPC"
+  cidr    = "10.1.0.0/16"
+  public_subnet = [
     "10.1.0.0/24",
     "10.1.1.0/24",
     "10.1.2.0/24",
     "10.1.3.0/24"
   ]
-  PRIVATE-SUBNET = [
+  private_subnet = [
     "10.1.100.0/24",
     "10.1.101.0/24",
     "10.1.102.0/24",
     "10.1.103.0/24",
     "10.1.104.0/24"
   ]
-  NAT = [
+  nat_association = [
     [
       "10.1.100.0/24",
       "10.1.101.0/24"
@@ -66,10 +66,10 @@ provider "aws" {
 
 module "vpc" {
   source  = "app.terraform.io/sundevs/vpc/aws"
-  version = "1.0.2"
-  NAME    = "MyVPC"
-  CIDR    = "10.1.0.0/16"
-  PUBLIC-SUBNET = [
+  version = "1.0.3"
+  name    = "MyVPC"
+  cidr    = "10.1.0.0/16"
+  public_subnet = [
     "10.1.0.0/24",
     "10.1.1.0/24"
   ]
@@ -87,15 +87,15 @@ provider "aws" {
 
 module "vpc" {
   source  = "app.terraform.io/sundevs/vpc/aws"
-  version = "1.0.2"
-  NAME    = "MyVPC"
-  CIDR    = "10.1.0.0/16"
+  version = "1.0.3"
+  name    = "MyVPC"
+  cidr    = "10.1.0.0/16"
 }
 ```
 
 ### Ejemplo #4
 
-Creacion de una VPC con **2 subredes publicas** y **2 subredes privadas sin NAT**.
+Creacion de una VPC con **2 subredes publicas** y **2 subredes privadas sin nat**.
 
 ```java
 provider "aws" {
@@ -104,14 +104,14 @@ provider "aws" {
 
 module "vpc" {
   source  = "app.terraform.io/sundevs/vpc/aws"
-  version = "1.0.2"
-  NAME    = "MyVPC"
-  CIDR    = "10.1.0.0/16"
-  PUBLIC-SUBNET = [
+  version = "1.0.3"
+  name    = "MyVPC"
+  cidr    = "10.1.0.0/16"
+  public_subnet = [
     "10.1.0.0/24",
     "10.1.1.0/24"
   ]
-  PRIVATE-SUBNET = [
+  private_subnet = [
     "10.1.100.0/24",
     "10.1.101.0/24"
   ]
